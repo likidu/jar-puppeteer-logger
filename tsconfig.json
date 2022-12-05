@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "moduleResolution": "Node",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "lib": ["esnext", "dom"],
+    "removeComments": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "preserveConstEnums": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["node_modules/@types", "typings"],
+    "baseUrl": "./src"
+  },
+  "compileOnSave": false,
+  "include": ["app/**/*", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
