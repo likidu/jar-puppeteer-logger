@@ -15,3 +15,9 @@ Containerized app for Jar to login with various end points like NGA bbs
    ```bash
    docker run -i --init --rm -p 3000:3000 --name jar-container jar
    ```
+
+## Use
+
+```
+http://localhost:3000/?url=https://facebook.com
+```
