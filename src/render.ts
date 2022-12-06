@@ -17,6 +17,12 @@ async function render(url: string) {
       '--disable-dev-shm-usage',
       '--enable-features=NetworkService',
       '-—disable-dev-tools',
+      // https://stackoverflow.com/questions/25098021/securityerror-blocked-a-frame-with-origin-from-accessing-a-cross-origin-frame
+      // https://stackoverflow.com/questions/52129649/puppeteer-cors-mistake/52131823
+      '--disable-web-security',
+      '--disable-site-isolation-trials',
+      '--disable-features=IsolateOrigins',
+      '--disable-features=BlockInsecurePrivateNetworkRequests',
     ],
   })
 
@@ -95,8 +101,6 @@ async function render(url: string) {
       `[puppeteer.app.render] ERROR: Render failed URL: ${url} Error:${error}`
     )
     return 'render error'
-  } finally {
-    await browser.close()
   }
 }
 
