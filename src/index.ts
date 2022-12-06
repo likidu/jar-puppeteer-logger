@@ -43,11 +43,15 @@ app.on('error', (err, ctx) => {
 
 // Enforce Url
 router.use(async (ctx: Context, next) => {
-  // Assert url
+  // Remove the 'url=' from the querystring
   // @ts-ignore: tx.request.body.url is unknown type
-  url = ctx.query.url || ctx.request.body.url
+  url = ctx.request.querystring.replace(/^(url\=)/, '') || ctx.request.body.url
+  // url = ctx.query.url || ctx.request.body.url
+
+  // Assert url
   ctx.assert(url, 400, "Url can't be null")
-  // set url
+
+  // Set url
   global.url = url
   // 如果监听公网IP地址则最好启用 `ticket` 验证，防止未授权使用
   // let ticket = ctx.query.ticket || ctx.request.body.ticket;

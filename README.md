@@ -21,3 +21,7 @@ Containerized app for Jar to login with various end points like NGA bbs
 ```
 http://localhost:3000/?url=https://facebook.com
 ```
+
+```
+http://localhost:3000/?url=https://www.chiphell.com/member.php?mod=logging&action=login
+```

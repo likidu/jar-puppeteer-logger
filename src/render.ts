@@ -3,6 +3,11 @@ import puppeteer from 'puppeteer'
 async function render(url: string) {
   console.log(`[puppeteer.app.render] DEBUG: Rendering: ${url}`)
 
+  const urlObj = new URL(url)
+  const params = urlObj.searchParams
+
+  console.log('params:', params)
+
   const browser = await puppeteer.launch({
     ignoreHTTPSErrors: true,
     headless: true,
@@ -90,6 +95,8 @@ async function render(url: string) {
       `[puppeteer.app.render] ERROR: Render failed URL: ${url} Error:${error}`
     )
     return 'render error'
+  } finally {
+    await browser.close()
   }
 }
 
