@@ -28,6 +28,11 @@ async function render(url: string) {
 
   const page = await browser.newPage()
 
+  await page.setViewport({ width: 240, height: 320 })
+  await page.setUserAgent(
+    'Mozilla/5.0 (Mobile; Nokia 8110 4G; rv:48.0) Gecko/48.0 Firefox/48.0 KAIOS/2.5'
+  )
+
   // Pause all medias
   page.frames().forEach(frame => {
     frame.evaluate(() => {
@@ -53,6 +58,19 @@ async function render(url: string) {
     let raw = true
     if (raw) {
       // TODO: 去处块级作用域影响
+      await page.evaluate(() => {
+        // Inject <base> for loading relative resources
+        const { origin, pathname } = location
+        if (!document.querySelector('base')) {
+          const base = document.createElement('base')
+          // Use Regex to remove the filename at end
+          // https://stackoverflow.com/questions/2161511/quick-regexp-to-get-path
+          base.href = `${origin}${pathname.replace(/[^\/]*$/, '')}`
+          // Base should normally be added at the beginning of <head> to make the rest of the css and js relative paths work
+          const head = document.querySelector('head')
+          head.insertBefore(base, head.firstChild)
+        }
+      })
       content = page.content()
     } else {
       content = await page.evaluate(() => {

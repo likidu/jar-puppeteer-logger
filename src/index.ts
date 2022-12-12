@@ -53,6 +53,7 @@ router.use(async (ctx: Context, next) => {
 
   // Set url
   global.url = url
+
   // 如果监听公网IP地址则最好启用 `ticket` 验证，防止未授权使用
   // let ticket = ctx.query.ticket || ctx.request.body.ticket;
   // ctx.assert(ticket === 'your ticket',400,"Ticket error");
