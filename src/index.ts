@@ -5,9 +5,9 @@ import bodyParser from 'koa-bodyparser'
 import json from 'koa-json'
 import logger from 'koa-logger'
 
+import type { LoginRequest } from './config'
+import { Forum } from './config'
 import login from './login'
-import type { LoginRequest } from './types'
-import { Forum } from './types'
 
 const app = new Koa()
 const router = new Router()
