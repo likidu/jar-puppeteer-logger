@@ -1,3 +1,5 @@
+import fs from 'fs'
+import https from 'https'
 import Koa, { Context } from 'koa'
 import Router from 'koa-router'
 
@@ -78,6 +80,13 @@ router.post('/', async ctx => {
 
 app.use(router.routes()).use(router.allowedMethods())
 
-app.listen(3000, () => {
-  console.log('Koa started.')
-})
+// app.listen(3000, () => {
+//   console.log('Koa started.')
+// })
+
+const options = {
+  key: fs.readFileSync('./ssl/key.pem'),
+  cert: fs.readFileSync('./ssl/cert.pem'),
+}
+
+https.createServer(options, app.callback()).listen(3001)

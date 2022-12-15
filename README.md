@@ -41,3 +41,7 @@ pm2 install typescript
 
 pm2 start --interpreter ts-node-dev src/server.ts
 ```
+
+## Reference
+
+https://nodejs.org/en/knowledge/HTTP/servers/how-to-create-a-HTTPS-server/
