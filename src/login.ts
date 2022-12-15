@@ -3,7 +3,7 @@ import puppeteer, { KnownDevices, Protocol } from 'puppeteer'
 import { Forum, ForumSettings, LoginRequest } from './config'
 
 type Response = {
-  cookie: Protocol.Network.Cookie[]
+  cookies: Protocol.Network.Cookie[]
 }
 
 /**
@@ -109,7 +109,7 @@ async function slideCaptcha(
  * @param request LoginRequest
  * @returns login cookie
  */
-async function login(request: LoginRequest): Promise<Response | string> {
+async function login(request: LoginRequest): Promise<Response | Error> {
   const { username, password, forum } = request
   console.log(`[puppeteer.app.login] DEBUG: Login: ${forum}`)
 
@@ -148,8 +148,7 @@ async function login(request: LoginRequest): Promise<Response | string> {
   // Create Puppeteer browser
   const browser = await puppeteer.launch({
     ignoreHTTPSErrors: true,
-    // headless: true,
-    headless: false,
+    headless: process.env.NODE_ENV === 'production',
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -219,19 +218,25 @@ async function login(request: LoginRequest): Promise<Response | string> {
     // Login
     await Promise.all([
       page.waitForNavigation({
-        waitUntil: 'networkidle2',
+        waitUntil: 'load',
       }),
       page.click(submitSelecor),
     ])
 
     // Get cookies
-    const cookie = { cookie: await page.cookies() }
-    return cookie
+    const cookies = await page.cookies()
+
+    // Check cookie has valid key to prove its logged in
+    if (!cookies.find(o => o.name === cookieCheck))
+      throw new Error('Cookie does not have valid key')
+
+    return { cookies }
   } catch (error) {
     console.log(
-      `[puppeteer.app.login] ERROR: Login failed URL: ${url} Error:${error}`
+      `[puppeteer.app.login] ERROR: Login failed URL: ${url} ${error}`
     )
-    return 'Login error!'
+    // return error
+    throw new Error(`${error}, login failed!`)
   } finally {
     await browser.close()
   }

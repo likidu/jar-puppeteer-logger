@@ -15,7 +15,8 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install -g npm@latest typescript && \
+RUN npm install -g npm@latest pm2 typescript && \
+  pm2 install typescript && \
   npm install --production --silent && \
   mv node_modules ../
 COPY . .

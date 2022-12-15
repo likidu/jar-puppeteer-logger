@@ -36,6 +36,15 @@ app.use(async (ctx, next) => {
   ctx.set('X-Engine-By', 'Puppeteer')
 })
 
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    ctx.status = 401
+    ctx.body = err.message
+  }
+})
+
 // Error log
 app.on('error', (err, ctx) => {
   console.error('[puppeteer.app] ERROR: ', err.message)
@@ -45,16 +54,15 @@ app.on('error', (err, ctx) => {
 router.use(async (ctx: Context, next) => {
   const { username, password, forum } = ctx.request.body as LoginRequest
 
-  const blank = null || ''
-  const validRequest =
-    username !== blank && password !== blank && !(forum in Forum)
+  // Assert credentials
+  const blank = undefined || ''
 
-  // Assert url
-  ctx.assert(
-    validRequest,
-    400,
-    "Username, Password and Forum name can't be null"
-  )
+  const validCredentials =
+    username === blank || password === blank ? undefined : true
+  ctx.assert(validCredentials, 400, "Username or password can't be empty!")
+
+  const validForum = !Object.values(Forum).includes(forum) ? undefined : true
+  ctx.assert(validForum, 400, 'Forum name is not valid!')
 
   // 如果监听公网IP地址则最好启用 `ticket` 验证，防止未授权使用
   // let ticket = ctx.query.ticket || ctx.request.body.ticket;
