@@ -36,15 +36,6 @@ app.use(async (ctx, next) => {
   ctx.set('X-Engine-By', 'Puppeteer')
 })
 
-app.use(async (ctx, next) => {
-  try {
-    await next()
-  } catch (err) {
-    ctx.status = 401
-    ctx.body = err.message
-  }
-})
-
 // Error log
 app.on('error', (err, ctx) => {
   console.error('[puppeteer.app] ERROR: ', err.message)
@@ -68,6 +59,15 @@ router.use(async (ctx: Context, next) => {
   // let ticket = ctx.query.ticket || ctx.request.body.ticket;
   // ctx.assert(ticket === 'your ticket',400,"Ticket error");
   await next()
+})
+
+router.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    ctx.status = 401
+    ctx.body = err.message
+  }
 })
 
 // Router

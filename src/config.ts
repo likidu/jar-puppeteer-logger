@@ -19,6 +19,6 @@ export const ForumSettings = {
   CHIPHELL: {
     name: Forum.CHIPHELL,
     url: 'https://www.chiphell.com/member.php?mod=logging&action=login&mobile=2',
-    check: 'v2x4_48dd_seccode',
+    check: 'v2x4_48dd_auth',
   },
 }
